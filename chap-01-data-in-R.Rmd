@@ -25,11 +25,174 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ```{r, results='hide', message=FALSE}
 # Bibliotecas Necessárias
-library(tidyverse);
-library(knitr);
-library(kableExtra);
-library(fosdata);
-library(HistData);
+library(tidyverse)
+library(knitr)
+library(kableExtra)
+library(latex2exp)
+library(fosdata)
+library(HistData)
+library(eaf)
 ```
 
 \section*{Exercícios}
+
+\begin{enumerate}
+  \setcounter{enumi}{3}
+  \item Neste exercício, construa o gráfico da função $f(p) = p (1-p)$ para $p \in [0,1]$.
+  \begin{enumerate}[label=\alph*.]
+    \item Use \verb|seq| para criar um vetor $p$ de números de 0 a 1 espaçados por $0.2$.
+    \item Use a função \verb|plot| para graficar $p$ na coordenada $x$ e $p(1-p)$ na coordenada $y$. Leia a página de ajuda para \verb|plot| e faça testes com o argumento \verb|type| para encontrar uma boa escolha para este gráfico.
+    \item Repita, mas criando um vetor $p$ de números de 0 a 1 espaçados por $0.01$.
+  \end{enumerate}
+\end{enumerate}
+\iniSol
+Vetor $p$ com \textit{step} igual a $0.1$:
+
+```{r problema-1.4, results='hide', message=FALSE}
+p1 <- seq(0, 1, by=0.2)
+Fp1 <- p1 * (1-p1)
+
+p2 <- seq(0, 1, by=0.01)
+Fp2 <- p2 * (1-p2)
+
+
+pdf(file = "figure/chap-01/problema-1.4.pdf",
+    width = 8,
+    height = 4.5)
+plot(
+  p1, Fp1, type="l", lty=1, col="steelblue",
+  xlab="p", ylab="f(p) = p(1-p)",
+)
+lines(
+  p2, Fp2, lty=1, col="salmon", xlab="", ylab=""
+)
+legend(x="topright", lty=c(1, 1),
+       legend = c("step=0.20", "step=0.01"),
+       col=c("steelblue", "salmon"),
+)
+grid(lty="dashed")
+
+dev.off()
+eaf::pdf_crop("figure/chap-01/problema-1.4.pdf")
+```
+
+\begin{figure}[H]
+  \centering
+  \caption{Gráfico da função $f(p) = p(1-p)$ para diferentes \textit{steps}}
+  \includegraphics[width=\textwidth]{figure/chap-01/problema-1.4.pdf}
+\end{figure}
+
+\fimSol
+
+\begin{enumerate}[resume]
+  \item Use \verb|R| para calcular a sima dos quadrados de todos os números de 1 a 100: $1^2 + 2^2 + \cdots + 99^2 + 100^2$.
+\end{enumerate}
+
+\iniSol
+```{r problema-1.5}
+soma <- sum((1:100)^2)
+print(soma)
+```
+
+\begin{align*}
+  \sum_{i = 1}^{100} x_i = 1^2 + 2^2 + \cdots + 99^2 + 100^2 = `r format(soma, big.mark='.', decimal.mark=',')`
+\end{align*}
+
+\fimSol
+
+\begin{enumerate}[resume]
+  \item Seja $x$ o vetor  obtido da execução do comando \verb|R| \verb|x <- seq(from=10, to=30, by=2)|.
+  \begin{enumerate}[label=\alph*.]
+    \item Qual é o comprimento de \verb|x|?
+    \item O que é \verb|x[2]|?
+    \item O que é \verb|x[1:5]|?
+    \item O que é \verb|x[1:3*2]|?
+    \item O que é \verb|x[1:(3*2)]|?
+    \item O que é \verb|x > 25|?
+    \item O que é \verb|x[x > 25]|?
+    \item O que é \verb|x[-1]|?
+    \item O que é \verb|x[-1:-3]|?
+  \end{enumerate}
+\end{enumerate}
+
+\iniSol
+```{r problema-1.6}
+# Definição do vetor x
+x <- seq(from = 10, to = 30, by = 2)
+x
+```
+
+```{r problema-1.6a}
+# a. Qual é o comprimento de x?
+length(x)
+```
+
+O comprimento do vetor \verb|x|, ou seja a quantidade de elementos desse vetor é igual a $\verb|length(x)| = `r length(x)`$.
+
+```{r problema-1.6b}
+# b. O que é x[2]?
+x[2]
+```
+
+\verb|x[2]| é o segundo elemento do vetor \verb|x|, e seu valor é $\verb|x[2]| = `r x[2]`$.
+
+```{r problema-1.6c}
+# c. O que é x[1:5]?
+x[1:5]
+```
+
+\verb|x[1:5]| é um subconjunto do vetor \verb|x| represetado pelos elementos desde a primeira posição até a quinta posição.
+
+```{r problema-1.6d}
+# d. O que é x[1:3*2]?
+x[1:3*2]
+```
+
+\verb|x[1:3*2]| é um subconjunto do vetor \verb|x| representado pelos elementos nas posições:
+$$
+\verb|1:3*2| = \verb|c(`r 1:3`)*2| = \verb|c(`r 1:3*2`)|
+$$
+
+```{r problema-1.6e}
+# e. O que é x[1:(3*2)]?
+x[1:(3*2)]
+```
+
+\verb|x[1:(3*2)]| é o subconjunto de \verb|x| representado pelos elementos de 1 até $`r 3*2`$, visto que:
+
+$$
+\verb|1:(3*2)| = \verb|1:`r 3*2`| = \verb|c(`r 1:(3*2)`)|
+$$
+
+```{r problema-1.6f}
+# f. O que é x > 25?
+x > 25
+```
+
+\verb|x > 25| é um vetor lógico (booleano), resultado da vefificação para cada elemento de \verb|x| se o referido elemento é maior que 25 (\verb|TRUE|) ou não (\verb|FALSE|).
+
+
+```{r problema-1.6g}
+# g. O que é x[x > 25]?
+x[x > 25]
+```
+
+\verb|x[x > 25]| é um subconjunto de \verb|x| representado pelos elementos de \verb|x| que são maiores que 25.
+
+```{r problema-1.6h}
+# h. O que é x[-1]?
+x[-1]
+```
+
+\verb|x[-1]| é o subconjunto de \verb|x| após a exclusão do primeiro elemento.
+
+```{r problema-1.6i}
+# i. O que é x[-1:-3]?
+x[-1:-3]
+```
+
+\verb|x[-1:-3]| é o subconjunto de \verb|x| após a exclusão dos elementos nas posições `r knitr::combine_words(1:3, and=' e ')`.
+
+
+
+\fimSol
