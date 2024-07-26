@@ -355,3 +355,39 @@ head(airquality)
 
 A variável \verb|Month| poderia ser melhor descrita como do tipo \verb|factor|.
 \fimSol
+
+\begin{enumerate}[resume]
+  \item Há um conjunto de dados integrado chamado \verb|state|, que na verdade é composto por sete variáveis separadas com nomes como \verb|state.name|, \verb|state.region| e \verb|state.area|.
+  \begin{enumerate}[label=\alph*.]
+    \item Quais são as possíveis regiões às quais um estado pode pertencer? Quantos estados existem em cada região?
+    \item Quais estados têm áres menor que 10.000 milhas quadradas?
+    \item Qual estado tem o centro geográfico mais ao sul? (Dica: use \verb|which.min|).
+  \end{enumerate}
+\end{enumerate}
+
+\iniSol
+```{r problema-1.9a}
+# a.
+# Tipo de dados da variável state.region
+class(state.region)
+# Regiões possíveis
+levels(state.region)
+# Quantidade estados por região
+table(state.region)
+```
+
+```{r problema-1.9b}
+# b. Estados com área menor que 10.000 milhas
+state.name[state.area < 10000]
+```
+
+```{r problema-1.9c}
+# c.
+state.name[which.min(state.center$y)]
+```
+
+No código acima, \verb|state.center| é uma lista de componentes nomeados \verb|x| e \verb|y|, que representam, respectivamente a latitude e a longitude do centro geográfico de cada estado. Ao aplicar \verb|which.min(state.center\$y)|, obtemos o índice no vetor \verb|state.center\$y| de menor valor, ou seja, menor longitude, ou ainda do  estado mais ao sul. Finalmente, ao aplicar \verb|state.name[which.min(state.center\$y)]|, encontramos no nome desse estado: `r state.name[which.min(state.center$y)]`.
+
+
+
+\fimSol
