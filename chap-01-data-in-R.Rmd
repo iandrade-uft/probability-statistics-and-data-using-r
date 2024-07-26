@@ -21,6 +21,11 @@ output:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+# Funções auxiliares
+fmt <- function(x, decimal.mark=',', big.mark='.', scientific=FALSE, n=2) {
+  result <- format(round(x, 2), decimal.mark=',', big.mark='.', scientific=FALSE)
+  return(result)
+}
 ```
 
 ```{r, results='hide', message=FALSE}
@@ -32,6 +37,11 @@ library(latex2exp)
 library(fosdata)
 library(HistData)
 library(eaf)
+library(tikzDevice)
+options(tikzMetricPackages = c("\\usepackage{amsmath}",
+                               "\\usepackage{xcolor}",
+                               "\\usepackage{tikz}",
+                               "\\usetikzlibrary{calc}"))
 ```
 
 \section*{Exercícios}
@@ -192,7 +202,156 @@ x[-1:-3]
 ```
 
 \verb|x[-1:-3]| é o subconjunto de \verb|x| após a exclusão dos elementos nas posições `r knitr::combine_words(1:3, and=' e ')`.
+\fimSol
+
+\begin{enumerate}[resume]
+  \item \verb|R| possui uma vetor denominado \verb|rivers| o qual contém os comprimentos do maiores rios Norte Americanos.
+  \begin{enumerate}[label=\alph*.]
+    \item Use \verb|?rivers| para apreender sobre o conjunto de dados.
+    \item Encontre a média e o desvio padrão dos dados dos rios usando as funções de \verb|R| base \verb|mean| e \verb|sd|.
+    \item Crie um histogram (\verb|hist|) dos dados de rios.
+    \item Obtenha cinco números resumos (\verb|summary|) dos dados dos rios.
+    \item Encontre o maior e o menor comprimento de rios do conjunto.
+    \item Crie uma lista de todos os (comprimentos de) rios maiores que 1000 milhas.
+  \end{enumerate}
+\end{enumerate}
+
+\iniSol
+```{r problema-1.7a}
+
+```
 
 
+```{r problema-1.7b1}
+# b1. Média do comprimento dos rios
+rivers_mean <- mean(rivers)
+rivers_mean
+```
 
+$$
+\overline{x}_{\text{rivers}} = \sum_{i = 1}^{n = `r length(rivers)`} \dfrac{x_i}{n} = \dfrac{`r fmt(rivers[1])` + `r fmt(rivers[2])` + \cdots + `r fmt(rivers[length(rivers)])`}{`r length(rivers)`} = \dfrac{`r fmt(sum(rivers))`}{`r length(rivers)`} = `r fmt(rivers_mean)` \; \text{milhas}
+$$
+```{r problema-1.7b2}
+# b2. Desvio Padrão do comprimento dos rios
+rivers_sd <- sd(rivers)
+rivers_sd
+```
+
+\begin{align*}
+\sigma_{\text{rivers}} = \sqrt{\sum_{i = 1}^{n = `r length(rivers)`} \dfrac{(x_i - \overline{x}_{\text{rivers}})^2 }{n}} &= \sqrt{\dfrac{(`r fmt(rivers[1])` - `r fmt(rivers_mean)`)^2 + (`r fmt(rivers[2])` - `r fmt(rivers_mean)`)^2 + \cdots + (`r fmt(rivers[length(rivers)])` - `r fmt(rivers_mean)`)^2}{`r length(rivers)`}}\\
+&= `r fmt(rivers_sd)` \; \text{milhas}
+\end{align*}
+
+
+```{r problema-1.7c, results='hide', message=FALSE, warning=FALSE}
+# c. Histograma da distribuição de comprimentos de rios
+tikz("tex/chap-01/problema-1.7c.tex",standAlone = TRUE,
+     packages=c("\\usepackage{amsmath}",
+                "\\usepackage{tikz}",
+                "\\usepackage{xcolor}",
+                "\\usetikzlibrary{calc}",
+                "\\usepackage[active,tightpage,psfixbb]{preview}",
+                "\\PreviewEnvironment{pgfpicture}"))
+
+hist(rivers,
+     xlab="Comprimento (milhas)", ylab="Frequência", main=""
+);
+
+rect(
+  xleft=rivers_mean-rivers_sd, xright=rivers_mean+rivers_sd,
+  ybottom=0, ytop=100, col= rgb(0.2745,0.5098, 0.7059,alpha=0.3)
+)
+
+abline(v=rivers_mean, lty=1, lwd=3, col="steelblue")
+legenda <- sprintf(
+  "$\\overline{x}_{\\text{rivers}} \\pm \\sigma_{\\text{rivers}} = (%s \\pm %s)$ milhas", 
+  fmt(rivers_mean), fmt(rivers_sd))
+
+legend(x="topright", lty=c(1), lwd=c(3),
+       legend = c(legenda),
+       col="steelblue",
+)
+
+box()
+
+dev.off();
+tools::texi2pdf("tex/chap-01/problema-1.7c.tex", clea=TRUE)
+system(paste(getOption("pdfviewer"), "tex/chap-01/problema-1.7c.tex", sep=""));
+file.rename("problema-1.7c.pdf", "figure/chap-01/problema-1.7c.pdf")
+eaf::pdf_crop("figure/chap-01/problema-1.7c.pdf")
+```
+
+\begin{figure}[H]
+  \centering
+  \caption{Distribuição do comprimento dos maiores rios Norte Americanos}
+  \includegraphics[width=\textwidth]{figure/chap-01/problema-1.7c.pdf}
+\end{figure}
+
+```{r problema-1.7d}
+# d. Medidas Resumo dos dados de rios
+summary(rivers)
+```
+
+```{r problema-1.7e}
+# e. Maior e Menor comprimentos de rios
+rivers_max <- max(rivers)
+rivers_min <- min(rivers)
+```
+
+O maior comprimento de rio do conjunto de dados foi de `r fmt(rivers_max)` milhas enquanto o menor comprimento foi de `r fmt(rivers_min)`.
+
+```{r problema-1.7f}
+# f. Lista de comprimentos de rios maiores que 1000 milhas
+rivers[rivers > 1000]
+```
+
+\fimSol
+
+\begin{enumerate}[resume]
+  \item Considere o conjunto de dados \verb|airquality|.
+  \begin{enumerate}[label=\alph*.]
+    \item Quantas observações de quantas variáveis existem?
+    \item Quais os nomes das variáveis?
+    \item Qual o tipo de dados de cada variável?
+    \item Você concorda com o tipo de dados associado a cada variável? Existem escolhas melhores?
+  \end{enumerate}
+\end{enumerate}
+
+\iniSol
+```{r problema-1.8a}
+# a. 
+n_row <- nrow(airquality)
+n_col <- ncol(airquality)
+```
+
+O conjunto de dados \verb|airquality| consiste em `r n_row` observações de `r n_col` variáveis.
+
+```{r problema-1.8b}
+# b.
+col_names <- colnames(airquality)
+col_names
+```
+
+Os nomes das variáveis são `r knitr::combine_words(col_names, and=" e ")`.
+
+
+```{r problema1.8c}
+# c.
+tbl <- sprintf("%8s %8s", "Variável", "Tipo")
+tbl <- sprintf("%s\n%s", tbl, "=================")
+for (name in col_names) {
+  row <- sprintf("%8s %8s", name, class(airquality[[name]]))
+  tbl <- sprintf("%s\n%s", tbl, row)
+}
+
+cat(tbl)
+```
+
+```{r problema-1.8d}
+# d.
+
+head(airquality)
+```
+
+A variável \verb|Month| poderia ser melhor descrita como do tipo \verb|factor|.
 \fimSol
