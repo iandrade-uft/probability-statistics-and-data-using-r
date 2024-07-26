@@ -84,6 +84,12 @@ $else$
 \newcommand{\chaptertitle}{}
 $endif$
 
+$if(chaptertitlenote)$
+\newcommand{\chaptertitlenote}{$chaptertitlenote$}
+$else$
+\newcommand{\chaptertitlenote}{}
+$endif$
+
 $if(chapternumber)$
 \newcommand{\chapternumber}{$chapternumber$}
 $else$
@@ -185,7 +191,7 @@ $endif$
     \large{\textbf{Capítulo $chapternumber$: }}
     $endif$
     $if(chaptertitle)$
-    \large{\textbf{$chaptertitle$}}
+    \large{\textbf{$chaptertitle$}}$if(chaptertitlenote)$\footnote{$chaptertitlenote$}$endif$
     $endif$
     \vspace{0.5cm}
   \end{center}

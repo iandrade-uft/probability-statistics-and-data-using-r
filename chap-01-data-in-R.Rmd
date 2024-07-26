@@ -1,0 +1,35 @@
+---
+title: "Título"
+author: "Igo da Costa Andrade"
+
+# Metadados
+booktitle: "Probability, Statistics, and Data"
+booksubtitle: "A Fresh Approach Using R"
+bookauthors: "Speegle, D.; Clair, B."
+bookaddres: "Local"
+bookpublisher: "CRC Press"
+bookyear: "2022"
+chaptertitle: "Dados em R"
+chaptertitlenote: "Título original: \\textit{Data in R}"
+chapternumber: "1"
+maincolor: "bf2036"
+
+output: 
+  bookdown::pdf_document2:
+    template: template.tex
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r, results='hide', message=FALSE}
+# Bibliotecas Necessárias
+library(tidyverse);
+library(knitr);
+library(kableExtra);
+library(fosdata);
+library(HistData);
+```
+
+\section*{Exercícios}
