@@ -386,8 +386,64 @@ state.name[state.area < 10000]
 state.name[which.min(state.center$y)]
 ```
 
-No código acima, \verb|state.center| é uma lista de componentes nomeados \verb|x| e \verb|y|, que representam, respectivamente a latitude e a longitude do centro geográfico de cada estado. Ao aplicar \verb|which.min(state.center\$y)|, obtemos o índice no vetor \verb|state.center\$y| de menor valor, ou seja, menor longitude, ou ainda do  estado mais ao sul. Finalmente, ao aplicar \verb|state.name[which.min(state.center\$y)]|, encontramos no nome desse estado: `r state.name[which.min(state.center$y)]`.
+No código acima, \verb|state.center| é uma lista de componentes nomeados \verb|x| e \verb|y|, que representam, respectivamente a latitude e a longitude do centro geográfico de cada estado. Ao aplicar \verb|which.min(state.center$y)|, obtemos o índice no vetor \verb|state.center$y| de menor valor, ou seja, menor longitude, ou ainda do  estado mais ao sul. Finalmente, ao aplicar \verb|state.name[which.min(state.center$y)]|, encontramos no nome desse estado: `r state.name[which.min(state.center$y)]`.
+\fimSol
 
+\begin{enumerate}[resume]
+  \item Considere o conjunto de dados \verb|mtcars|.
+  \begin{enumerate}[label=\alph*.]
+    \item Quais carros têm 4 marchas?
+    \item Que subconjunto de \verb|mtcars| é descrito por \verb|mtcars[mtcars$disp > 150 & mtcars$mpg > 20,] |?
+    \item Quais carros têm 4 marchas para frente e transmissão manual? (Nota: transmissão manual é 1 e automática é 0.)
+    \item Quais carros têm 4 marchas para frente ou transmissão manual?
+    \item Encontre a média de \verb|mpg| dos carros com 2 carburadores.
+  \end{enumerate}
+\end{enumerate}
+
+
+\iniSol
+```{r problema-1.10a1}
+# Visualização do conjunto de dados
+head(mtcars)
+```
+
+O conjunto de dados \verb|mtcars| consiste em `r nrow(mtcars)` observações de `r ncol(mtcars)` variáveis. A título de exemplo, as seis primeiras observações são mostradas acima.
+
+```{r problema-1.10a2}
+# a. 
+nrow(mtcars[mtcars$gear == 4, ])
+```
+
+Existem `r nrow(mtcars[mtcars$gear == 4, ])` com 4 marchas.
+
+```{r problema1-10b}
+# b.
+mtcars[mtcars$disp > 150 & mtcars$mpg > 20,]
+```
+
+O subconjunto acima mostra os carros para os quais o deslocamento do motor (\verb|disp|) é superior a 150 \textbf{e} a eficiência do combustível (\verb|mpg|) é maior que 20.
+
+```{r problema-1.10c}
+# c.
+mtcars[mtcars$gear == 4 & mtcars$am == 1, ]
+```
+
+São eles: \textbf{`r knitr::combine_words(rownames(mtcars[mtcars$gear == 4 & mtcars$am == 1, ]), and=" e ")`}.
+
+```{r problema-1.10d}
+# d.
+mtcars[mtcars$gear == 4 | mtcars$am == 1, ]
+```
+
+São eles: \textbf{`r knitr::combine_words(rownames(mtcars[mtcars$gear == 4 | mtcars$am == 1, ]), and=" e ")`}.
+
+```{r problema-1.10e}
+# e.
+mpg_bar <- mean(mtcars[mtcars$carb == 2, c("mpg")])
+mpg_bar
+```
+
+A eficiência média do consumo de combustível para os carros com 2 carburadores foi de `r fmt(mpg_bar)` milhas por galão.
 
 
 \fimSol
